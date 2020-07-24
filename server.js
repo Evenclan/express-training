@@ -1,7 +1,11 @@
 const express = require('express');
 const path = require('path');
+const hbs = require('express-handlebars');
 
 const app = express();
+
+app.engine('.hbs', hbs());
+app.set('view engine', '.hbs');
 
 app.use((req, res, next) => {
     res.show = (name) => {
@@ -16,16 +20,32 @@ app.use('/user', (req, res, next) => {
 
 app.use(express.static(path.join(__dirname, '/public')));
 
+app.get('/hello/:name', (req, res) => {
+    res.render('Hello', { name: req.params.name });
+  });
+
 app.get('/home', (req, res) => {
-    res.show('home.html');
+    res.render('home');
 });
 
 app.get('/', (req, res) => {
-    res.show('home.html');
+    res.render('home');
 });
 
 app.get('/about', (req, res) => {
-    res.show('about.html');
+    res.render('about');
+});
+
+app.get('/contact', (req, res) => {
+    res.render('contact', { layout: 'dark'});
+});
+
+app.get('/info', (req, res) => {
+    res.render('info');
+});
+
+app.get('/history', (req, res) => {
+    res.render('history');
 });
 
 app.use((req, res) => {
